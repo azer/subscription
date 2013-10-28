@@ -1,0 +1,32 @@
+{
+  "name": "subscription",
+  "version": "0.0.0",
+  "description": "Library to store and manage paid subscriptions via Stripe and LevelDB",
+  "main": "index.js",
+  "scripts": {
+    "test": "fox"
+  },
+  "dependencies": {
+    "level-json": "*",
+    "stripe": "*",
+    "property": "0.0.0",
+    "english-time": "0.0.8",
+    "local-debug": "0.0.0"
+  },
+  "devDependencies": {
+    "fox": "*",
+    "call-all": "*"
+  },
+  "keywords": [
+    "customers",
+    "payments",
+    "stripe",
+    "subscription"
+  ],
+  "repository": {
+    "url": "git@github.com:azer/subscription.git",
+    "type": "git"
+  },
+  "author": "Azer Koçulu <azer@kodfabrik.com>",
+  "license": "BSD"
+}
