@@ -15,12 +15,12 @@ Define a new subscription:
 ```js
 subscription = require('subscription')('stripe-api-key', 'leveldb-path')
 
-subscription.define('atlas magazine', { 'price': 1000, period: '1 month', currency: 'usd' }, function (error, atlas) {
+subscription.service.define('atlas magazine', { 'price': 1000, period: '1 month', currency: 'usd' }, function (error, atlas) {
 
   subscription.priceOf(atlas, '1 month')
   // => 1000 (Ten dollars)
 
-  subscription.priceOf(atlas, '1 year')
+    subscription.priceOf(atlas, '1 year')
   // => 12000 (One Twenty Dollars)
 
 })
@@ -32,7 +32,7 @@ Purchase a subscription:
 options = {
   customer: 'customer@website.com',
   length: '1 year',
-  token: 'tok_2oWvm6yRBFSMSh' // obtained with Stripe.js
+  token: 'tok_2oWvm6yRBFSMSh' // obtain it with Stripe.js
 }
 
 subscription.purchase('atlas magazine', options, function (error, purchase) {
@@ -57,28 +57,36 @@ Get remaining subscription of a customer:
 
 ```js
 subscription.remaining('azer@kodfabrik.com', 'atlas magazine', function (error, remaining) {
-
   remaining
   // => 8035200000 (3 months)
-
 })
 ```
 
-List all subscriptions of a user:
+List subscriptions of a user:
 
 ```js
 subscription.subscriptionsOf('azer@kodfabrik.com', function (error, subs) {
-
   subs
   // => ['atlas magazine']
-
 })
 ```
 
-## More Docs
+Extend a subscription:
 
-* `test.js`
-* [english-time](http://github.com/azer/english-time): The library used for parsing time inputs.
+```js
+subscription.purchase.extension('atlas magazine', { customer: 'azer@kodfabrik.com', length: '2 years', token: token }, function (error, purchase) {
+  purchase.amount
+  // => 24000
+});
+```
+
+Upgrade a subscription:
+
+```js
+subscription.purchase.upgrade({ customer: 'hi@ada.io', from: 'cheaper', to: 'more expensive service', token: token }, function (error, purchase) {
+  if (error) return callback(error);
+});
+```
 
 ## Debugging
 
@@ -99,3 +107,8 @@ $ DEBUG=subscription:fatal,subscription:purchase
 ```bash
 $ API_KEY=sk_test_FIvJu2hkZszNIFzGgVNAqo2x
 ```
+
+## More Docs
+
+* `test.js`
+* [english-time](http://github.com/azer/english-time): The library used for parsing time inputs.

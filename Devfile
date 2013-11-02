@@ -1,0 +1,6 @@
+test = bin 'fox'
+
+all 'test'
+
+task 'test', ->
+  test 'test/{balance,cancel,purchase,service} -t 9000'

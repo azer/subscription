@@ -11,11 +11,14 @@
     "stripe": "*",
     "property": "0.0.0",
     "english-time": "0.0.8",
-    "local-debug": "0.0.0"
+    "local-debug": "0.0.0",
+    "new-error": "0.0.0"
   },
   "devDependencies": {
     "fox": "*",
-    "call-all": "*"
+    "call-all": "*",
+    "map": "*",
+    "iter": "*"
   },
   "keywords": [
     "customers",

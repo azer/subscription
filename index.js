@@ -18,7 +18,10 @@ function subscription (apiKey, path) {
   }
 
   return {
-    define: require("./lib/define"),
+    balance: require('./lib/balance'),
+    cancel: require('./lib/cancel'),
+    charges: require('./lib/charges'),
+    service: require("./lib/service"),
     priceOf: require('./lib/price-of'),
     purchase: require('./lib/purchase'),
     has: require('./lib/has'),
