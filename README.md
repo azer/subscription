@@ -105,7 +105,7 @@ $ DEBUG=subscription:fatal,subscription:purchase
 ## Running Tests
 
 ```bash
-$ API_KEY=sk_test_FIvJu2hkZszNIFzGgVNAqo2x
+$ API_KEY=sk_test_FIvJu2hkZszNIFzGgVNAqo2x npm test
 ```
 
 ## More Docs
