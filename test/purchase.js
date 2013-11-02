@@ -92,7 +92,6 @@ describe('purchase', function(){
   });
 
   it('can upgrade a plan to another one', function(done){
-
     subscription.purchase.upgrade({ customer: customers[0], from: services[0].name, to: services[1].name, token: tokens[2] }, function (error, purchase) {
       if (error) return done(error);
 
@@ -109,7 +108,17 @@ describe('purchase', function(){
       });
 
     });
+  });
 
+  it('can purchase by passing card info', function(done){
+    subscription.purchase.extension(services[1].name, { customer: customers[0], card: fixtures.card, length: '1 year' }, function (error, purchase) {
+      if (error) return done(error);
+
+      expect(purchase.amount).to.equal(36000);
+      expect(purchase.expire_ts).to.be.above(Date.now() + 32140800000 - 10000);
+      done();
+
+    });
   });
 
 });
