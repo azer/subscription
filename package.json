@@ -1,6 +1,6 @@
 {
   "name": "subscription",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Library to store and manage paid subscriptions via Stripe and LevelDB",
   "main": "index.js",
   "scripts": {
