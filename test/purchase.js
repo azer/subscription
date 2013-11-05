@@ -11,7 +11,7 @@ describe('purchase', function(){
       services = _services;
       customers = fixtures.customers();
 
-      fixtures.tokens(3)(function (error, _tokens) {
+      fixtures.tokens(4)(function (error, _tokens) {
         if (error) return done(error);
 
         tokens = _tokens;
@@ -105,6 +105,30 @@ describe('purchase', function(){
       subscription.subscriptionsOf(customers[0], function (error, subs) {
         expect(subs).to.deep.equal([services[2].name, services[1].name]);
         done();
+      });
+
+    });
+  });
+
+  it('can upgrade a free plan to another one', function(done){
+    subscription.purchase(services[2].name, { customer: customers[5] }, function (error, purchase) {
+      if (error) return done(error);
+
+      subscription.purchase.upgrade({ customer: customers[5], from: services[2].name, to: services[1].name, token: tokens[3] }, function (error, purchase) {
+        if (error) return done(error);
+
+        expect(purchase.amount).to.equal(36000);
+        expect(purchase.customer).to.equal(customers[5]);
+        expect(purchase.currency).to.equal(services[2].currency);
+        expect(purchase.create_ts).to.be.above(Date.now() - 10000);
+        expect(purchase.start_ts).to.be.above(Date.now() - 10000);
+        expect(purchase.expire_ts).to.be.above(Date.now() + 18748800000 - 10000);
+
+        subscription.subscriptionsOf(customers[0], function (error, subs) {
+          expect(subs).to.deep.equal([services[2].name, services[1].name]);
+          done();
+        });
+
       });
 
     });

@@ -55,4 +55,17 @@ describe('cancel', function(){
     });
   });
 
+  it('can cancel a not paid subscription', function(done){
+    subscription.purchase(services[2].name, { length: '1 year', customer: customers[2] }, function (error, purchase) {
+      if (error) return done(error);
+
+      subscription.cancel(purchase.customer, purchase.service, function (error, result) {
+        if (error) return done(error);
+        expect(result.balance).to.equal(0);
+        expect(result.remainingTime).to.be.above(32140800000 - 10000);
+        done();
+      });
+    });
+  });
+
 });
