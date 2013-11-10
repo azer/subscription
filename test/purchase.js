@@ -27,9 +27,9 @@ describe('purchase', function(){
       expect(purchase.amount).to.equal(3000);
       expect(purchase.customer).to.equal(customers[0]);
       expect(purchase.currency).to.equal('usd');
-      expect(purchase.create_ts).to.be.above(Date.now() - 7000);
-      expect(purchase.start_ts).to.be.above(Date.now() - 5000);
-      expect(purchase.expire_ts).to.be.above(Date.now() + 8035200000 - 5000);
+      expect(purchase.create_ts).to.be.above(Date.now() - 10000);
+      expect(purchase.start_ts).to.be.above(Date.now() - 10000);
+      expect(purchase.expire_ts).to.be.above(Date.now() + 8035200000 - 10000);
       done();
     });
   });
@@ -92,41 +92,56 @@ describe('purchase', function(){
   });
 
   it('can upgrade a plan to another one', function(done){
-    subscription.purchase.upgrade({ customer: customers[0], from: services[0].name, to: services[1].name, token: tokens[2] }, function (error, purchase) {
+
+    subscription.priceOf.upgrade(customers[0], services[0], services[1], function (error, upgradePrice) {
       if (error) return done(error);
 
-      expect(purchase.amount).to.equal(14000);
-      expect(purchase.customer).to.equal(customers[0]);
-      expect(purchase.currency).to.equal(services[0].currency);
-      expect(purchase.create_ts).to.be.above(Date.now() - 10000);
-      expect(purchase.start_ts).to.be.above(Date.now() - 10000);
-      expect(purchase.expire_ts).to.be.above(Date.now() + 18748800000 - 10000);
+      subscription.purchase.upgrade({ customer: customers[0], from: services[0].name, to: services[1].name, token: tokens[2] }, function (error, purchase) {
+        if (error) return done(error);
 
-      subscription.subscriptionsOf(customers[0], function (error, subs) {
-        expect(subs).to.deep.equal([services[2].name, services[1].name]);
-        done();
+        expect(upgradePrice).to.equal(purchase.amount);
+        expect(purchase.amount).to.equal(14000);
+        expect(purchase.customer).to.equal(customers[0]);
+        expect(purchase.currency).to.equal(services[0].currency);
+        expect(purchase.create_ts).to.be.above(Date.now() - 10000);
+        expect(purchase.start_ts).to.be.above(Date.now() - 10000);
+        expect(purchase.expire_ts).to.be.above(Date.now() + 18748800000 - 10000);
+
+        subscription.subscriptionsOf(customers[0], function (error, subs) {
+          if (error) return done(error);
+          expect(subs).to.deep.equal([services[2].name, services[1].name]);
+          done();
+        });
+
       });
 
     });
+
   });
 
   it('can upgrade a free plan to another one', function(done){
     subscription.purchase(services[2].name, { customer: customers[5] }, function (error, purchase) {
       if (error) return done(error);
 
-      subscription.purchase.upgrade({ customer: customers[5], from: services[2].name, to: services[1].name, token: tokens[3] }, function (error, purchase) {
+      subscription.priceOf.upgrade(customers[5], services[2], services[1], function (error, price) {
         if (error) return done(error);
+        expect(price).to.equal(36000);
 
-        expect(purchase.amount).to.equal(36000);
-        expect(purchase.customer).to.equal(customers[5]);
-        expect(purchase.currency).to.equal(services[2].currency);
-        expect(purchase.create_ts).to.be.above(Date.now() - 10000);
-        expect(purchase.start_ts).to.be.above(Date.now() - 10000);
-        expect(purchase.expire_ts).to.be.above(Date.now() + 18748800000 - 10000);
+        subscription.purchase.upgrade({ customer: customers[5], from: services[2].name, to: services[1].name, token: tokens[3] }, function (error, purchase) {
+          if (error) return done(error);
 
-        subscription.subscriptionsOf(customers[0], function (error, subs) {
-          expect(subs).to.deep.equal([services[2].name, services[1].name]);
-          done();
+          expect(purchase.amount).to.equal(36000);
+          expect(purchase.customer).to.equal(customers[5]);
+          expect(purchase.currency).to.equal(services[2].currency);
+          expect(purchase.create_ts).to.be.above(Date.now() - 10000);
+          expect(purchase.start_ts).to.be.above(Date.now() - 10000);
+          expect(purchase.expire_ts).to.be.above(Date.now() + 18748800000 - 10000);
+
+          subscription.subscriptionsOf(customers[0], function (error, subs) {
+            expect(subs).to.deep.equal([services[2].name, services[1].name]);
+            done();
+          });
+
         });
 
       });

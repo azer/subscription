@@ -30,7 +30,6 @@ describe('.get', function(){
       done();
     });
   });
-
 });
 
 describe('.all', function(){
